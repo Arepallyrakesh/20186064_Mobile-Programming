@@ -28,6 +28,8 @@ import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
+import java.util.zip.InflaterInputStream;
+import android.view.MenuInflater;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,27 +102,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // completed (2) Create a menu resource in res/menu/ called forecast.xml
-    // Completed (3) Add one item to the menu with an ID of action_refresh
-    // completed (4) Set the title of the menu item to "Refresh" using strings.xml
+    // TODO (2) Create a menu resource in res/menu/ called forecast.xml
+    // TODO (3) Add one item to the menu with an ID of action_refresh
+    // TODO (4) Set the title of the menu item to "Refresh" using strings.xml
 
-    // completed (5) Override onCreateOptionsMenu to inflate the menu for this Activity
-    // completed (6) Return true to display the menu
+    // TODO (5) Override onCreateOptionsMenu to inflate the menu for this
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.forecast, menu);
         return true;
     }
 
+    // TODO (6) Return true to display the menu
 
-    // completed (7) Override onOptionsItemSelected to handle clicks on the refresh button
+    // TODO (7) Override onOptionsItemSelected to handle clicks on the refresh button
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_refresh) {
             mWeatherTextView.setText("");
             loadWeatherData();

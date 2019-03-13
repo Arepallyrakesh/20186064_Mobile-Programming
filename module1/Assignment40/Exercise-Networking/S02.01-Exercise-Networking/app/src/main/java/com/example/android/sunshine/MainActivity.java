@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
+import com.example.android.sunshine.utilities.SunshineDateUtils;
 
 import java.net.URL;
 
@@ -42,67 +43,63 @@ public class MainActivity extends AppCompatActivity {
         mWeatherTextView = (TextView) findViewById(R.id.tv_weather_data);
 
         // TODO (4) Delete the dummy weather data. You will be getting REAL data from the Internet in this lesson.
+        /*
+         * This String array contains dummy weather data. Later in the course, we're going to get
+         * real weather data. For now, we want to get something on the screen as quickly as
+         * possible, so we'll display this dummy data.
+         */
+
 
         // TODO (3) Delete the for loop that populates the TextView with dummy data
+        /*
+         * Iterate through the array and append the Strings to the TextView. The reason why we add
+         * the "\n\n\n" after the String is to give visual separation between each String in the
+         * TextView. Later, we'll learn about a better way to display lists of data.
+         */
+
 
         // TODO (9) Call loadWeatherData to perform the network request to get the weather
-        /* Once all of our views are setup, we can load the weather data. */
         loadWeatherData();
-    }
 
-    // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
-    /**
-     * This method will get the user's preferred location for weather, and then tell some
-     * background method to get the weather data in the background.
-     */
+
+
+    }
     private void loadWeatherData() {
         String location = SunshinePreferences.getPreferredWeatherLocation(this);
         new FetchWeatherTask().execute(location);
     }
 
+    // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
+
     // TODO (5) Create a class that extends AsyncTask to perform network requests
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
-
-        // TODO (6) Override the doInBackground method to perform your network requests
         @Override
         protected String[] doInBackground(String... params) {
-
-            /* If there's no zip code, there's nothing to look up. */
             if (params.length == 0) {
                 return null;
             }
-
             String location = params[0];
-            URL weatherRequestUrl = NetworkUtils.buildUrl(location);
+            URL weatherRequestURL = NetworkUtils.buildUrl(location);
 
             try {
-                String jsonWeatherResponse = NetworkUtils
-                        .getResponseFromHttpUrl(weatherRequestUrl);
-
-                String[] simpleJsonWeatherData = OpenWeatherJsonUtils
-                        .getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
-
-                return simpleJsonWeatherData;
-
-            } catch (Exception e) {
+                String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestURL);
+                String[] simpleJSONWeatherData = OpenWeatherJsonUtils.getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
+                return simpleJSONWeatherData;
+            } catch(Exception e) {
                 e.printStackTrace();
                 return null;
             }
         }
 
-        // TODO (7) Override the onPostExecute method to display the results of the network request
         @Override
         protected void onPostExecute(String[] weatherData) {
             if (weatherData != null) {
-                /*
-                 * Iterate through the array and append the Strings to the TextView. The reason why we add
-                 * the "\n\n\n" after the String is to give visual separation between each String in the
-                 * TextView. Later, we'll learn about a better way to display lists of data.
-                 */
-                for (String weatherString : weatherData) {
-                    mWeatherTextView.append((weatherString) + "\n\n\n");
+                for (String weather : weatherData) {
+                    mWeatherTextView.append(weather + "\n\n\n");
                 }
             }
         }
     }
+    // TODO (6) Override the doInBackground method to perform your network requests
+    // TODO (7) Override the onPostExecute method to display the results of the network request
 }
